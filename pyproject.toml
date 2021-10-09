@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "disaster_response_project"
+version = "0.1.0"
+description = "Project to apply ML to disaster response data"
+authors = ["Eduardo Chiarotti <pythonbyte>"]
+
+[tool.poetry.dependencies]
+python = "^3.7.9"
+pandas = "^1.3.3"
+Flask = "^2.0.2"
+SQLAlchemy = "^1.4.25"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
