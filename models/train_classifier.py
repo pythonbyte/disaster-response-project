@@ -16,7 +16,7 @@ from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.multioutput import MultiOutputClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import classification_report
 
@@ -78,7 +78,7 @@ def tokenize(text: str) -> List[str]:
     return stemmed_tokens
 
 
-def build_model() -> Pipeline:
+def build_model() -> GridSearchCV:
     """
     Build pipeline model.
 
@@ -93,7 +93,21 @@ def build_model() -> Pipeline:
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(RandomForestClassifier()))
     ])
-    return pipeline
+
+    # used just 2 because was taking too much time
+    parameters = {
+        #     'vect__ngram_range': [(1, 1), (1, 2)],
+        #     'tfidf__use_idf': (True, False),
+        #     'clf__estimator__bootstrap': [True, False],
+        #     'clf__estimator__max_depth': [10, None],
+        #     'clf__estimator__min_samples_leaf': [1, 2],
+        #     'clf__estimator__min_samples_split': [2, 5],
+        'vect__max_df': [0.5, 1.0],
+        'clf__estimator__n_estimators': [10, 20, 50]
+    }
+
+    cv = GridSearchCV(pipeline, param_grid=parameters, cv=2, n_jobs=-1)
+    return cv
 
 
 def evaluate_model(model: Pipeline, X_test: np.ndarray,
